@@ -1,6 +1,7 @@
 let video = document.getElementById("video");
 let img = document.getElementById("photo");
 let captured = document.getElementsByClassName("captured");
+let labels = document.getElementById("labels");
 
 navigator.mediaDevices.getUserMedia({ video: true })
 .then(stream => {
@@ -34,4 +35,30 @@ function upload() {
         formData.append("uploads", blob);
         http.send(formData);
     });
+}
+
+function sendToLabelDetection() {
+    const http = new XMLHttpRequest();
+    const url = "labels";
+    snap().then((blob) => {
+        http.open("POST", url, true);
+        http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        http.onreadystatechange = () => {//Call a function when the state changes.
+            if (http.readyState == 4 && http.status == 200) {
+                labels.innerHTML = prepareText(JSON.parse(http.responseText));
+            }
+        }
+        const formData = new FormData();
+        formData.append("uploads", blob);
+        http.send(formData);
+    });
+}
+
+function prepareText(labels) {
+    let formattedText = '';
+    labels.forEach((item)=>{
+        formattedText += "<li>description: " + item.description +  " - score: "+ item.score + "</li>";
+    });
+    console.log(formattedText);
+    return "<ul>"+formattedText+"</ul>";
 }

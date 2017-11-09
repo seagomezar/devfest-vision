@@ -40,3 +40,27 @@ app.post("/upload", upload.single('uploads'),
     }
 );
 
+const vision = require('@google-cloud/vision')({
+    projectId: 'vision-poc-180601',
+    keyFilename: './cloud-credentials.json'
+});
+
+app.post("/labels", upload.single('uploads'), function (req, res) {
+    const currentFile = req.file.path;
+    const request = {
+        source: {
+            filename: currentFile
+        }
+    };
+    vision.labelDetection(request)
+        .then((results) => {
+            const labels = results[0].labelAnnotations;
+            console.log('Labels:');
+            labels.forEach((label) => console.log(label.description));
+            res.send(labels);
+        })
+        .catch((err) => {
+            console.error('ERROR:', err);
+            res.send("BAD");
+        });
+});

@@ -17,9 +17,17 @@
     </div>
     <nav>
         <button class="shutter" onclick="upload()">
-            Tomar una foto
+            Tomar y subir una foto
+        </button>
+        <button class="shutter" onclick="sendToLabelDetection()">
+            Analizar imagen
         </button>
     </nav>
+
+    <div>
+        <h2>Características de la imagen</h2>
+        <div id="labels"></div>
+    </div>
 
     <script src="./app.js"></script>
 </body>
