@@ -64,3 +64,19 @@ app.post("/labels", upload.single('uploads'), function (req, res) {
             res.send("BAD");
         });
 });
+
+app.post("/faces", upload.single('uploads'), 
+    (req, res) => {
+        const currentFile = req.file.path;
+        vision.faceDetection({ source: { filename: currentFile } })
+            .then((results) => {
+                const faces = results[0].faceAnnotations;
+                res.send(faces);
+            })
+            .catch((err) => {
+                console.error('ERROR:', err);
+                res.send("BAD");
+            });
+    }
+);
+

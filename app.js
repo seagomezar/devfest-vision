@@ -2,6 +2,7 @@ let video = document.getElementById("video");
 let img = document.getElementById("photo");
 let captured = document.getElementsByClassName("captured");
 let labels = document.getElementById("labels");
+let faceCounter = document.getElementById("faceCounter");
 
 navigator.mediaDevices.getUserMedia({ video: true })
 .then(stream => {
@@ -61,4 +62,22 @@ function prepareText(labels) {
     });
     console.log(formattedText);
     return "<ul>"+formattedText+"</ul>";
+}
+
+function sendToFaceDetection() {
+    const http = new XMLHttpRequest();
+    const url = "faces";
+    snap().then((blob) => {
+        http.open("POST", url, true);
+        http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        http.onreadystatechange = function (data) {//Call a function when the state changes.
+            if (http.readyState == 4 && http.status == 200) {
+                const faces = JSON.parse(http.response);
+                console.log(faces);
+            }
+        }
+        var formData = new FormData();
+        formData.append("uploads", blob);
+        http.send(formData);
+    });
 }
