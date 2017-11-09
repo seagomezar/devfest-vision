@@ -1,0 +1,8 @@
+.live-camera {
+    width: 40%;
+    display: inline-block;
+}
+.captured {
+    width: 40%;
+    display: inline-block;
+}
