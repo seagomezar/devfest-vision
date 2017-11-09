@@ -3,6 +3,7 @@ let img = document.getElementById("photo");
 let captured = document.getElementsByClassName("captured");
 let labels = document.getElementById("labels");
 let faceCounter = document.getElementById("faceCounter");
+let continuar = true;
 
 navigator.mediaDevices.getUserMedia({ video: true })
 .then(stream => {
@@ -76,7 +77,32 @@ function sendToFaceDetection() {
                 console.log(faces);
             }
         }
-        var formData = new FormData();
+        const formData = new FormData();
+        formData.append("uploads", blob);
+        http.send(formData);
+    });
+}
+
+function stopFacesCounter() {
+    continuar = false;
+}
+
+function facesCounter() {
+    const http = new XMLHttpRequest();
+    const url = "faces";
+    snap().then((blob) => {
+        http.open("POST", url, true);
+        http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        http.onreadystatechange = (data) => {//Call a function when the state changes.
+            if (http.readyState == 4 && http.status == 200) {
+                const faces = JSON.parse(http.response);
+                faceCounter.innerText = faces.length;
+                if (continuar) {
+                    facesCounter();
+                }
+            }
+        }
+        const formData = new FormData();
         formData.append("uploads", blob);
         http.send(formData);
     });

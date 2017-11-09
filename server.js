@@ -80,3 +80,19 @@ app.post("/faces", upload.single('uploads'),
     }
 );
 
+app.post("/faces-optimized", upload.single('uploads'), function (req, res) {
+    const currentFile = req.file.path;
+    vision.faceDetection({ source: { filename: currentFile } })
+        .then((results) => {
+            const faces = results[0].faceAnnotations;
+            fs.unlink(currentFile, (err) => {
+                if (err) throw err;
+            });
+            res.send(faces);
+        })
+        .catch((err) => {
+            console.error('ERROR:', err);
+            res.send("BAD");
+        });
+});
+

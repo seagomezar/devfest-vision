@@ -25,11 +25,23 @@
         <button class="shutter" onclick="sendToFaceDetection()">
             Detectar rostros y características
         </button>
+        <button class="shutter" onclick="facesCounter()">
+            Contar rostros
+        </button>
+        <button class="shutter" onclick="stopFacesCounter()">
+            Detener conteo
+        </button>
     </nav>
 
     <div>
         <h2>Características de la imagen</h2>
         <div id="labels"></div>
+    </div>
+
+    <div class="indicadores">
+        <h1>Número de personas en la imagen:
+            <span id="faceCounter">undetected</span>
+        </h1>
     </div>
 
     <script src="./app.js"></script>
