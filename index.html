@@ -31,6 +31,9 @@
         <button class="shutter" onclick="stopFacesCounter()">
             Detener conteo
         </button>
+        <button class="shutter" onclick="emotionAnalysis()">
+            Analizar emociones
+        </button>
     </nav>
 
     <div>
@@ -39,9 +42,26 @@
     </div>
 
     <div class="indicadores">
-        <h1>Número de personas en la imagen:
+        <p>
+            <strong>Personas detectadas: </strong>
             <span id="faceCounter">undetected</span>
-        </h1>
+        </p>
+        <p>
+            <strong>Personas Felices: </strong>
+            <span id="joyCounter">undetected</span>
+        </p>
+        <p>
+            <strong>Personas tristes: </strong>
+            <span id="sorrowCounter">undetected</span>
+        </p>
+        <p>
+            <strong>Personas sorprendidas: </strong>
+            <span id="surpriseCounter">undetected</span>
+        </p>
+        <p>
+            <strong>Personas bravas: </strong>
+            <span id="angryCounter">undetected</span>
+        </p>
     </div>
 
     <script src="./app.js"></script>

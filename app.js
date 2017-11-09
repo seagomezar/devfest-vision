@@ -107,3 +107,47 @@ function facesCounter() {
         http.send(formData);
     });
 }
+
+function emotionAnalysis() {
+    let sorrowCounter = document.getElementById("sorrowCounter");
+    let joyCounter = document.getElementById("joyCounter");
+    let angryCounter = document.getElementById("angryCounter");
+    let surpriseCounter = document.getElementById("surpriseCounter");
+
+    const http = new XMLHttpRequest();
+    const url = "faces";
+    let sorrowPeopleCounter = 0;
+    let angryPeopleCounter = 0;
+    let joyPeopleCounter = 0;
+    let surprisePeopleCounter = 0;
+    
+    
+    snap().then((blob) => {
+        http.open("POST", url, true);
+        http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        http.onreadystatechange = (data) => {//Call a function when the state changes.
+            if (http.readyState == 4 && http.status == 200) {
+                const faces = JSON.parse(http.response);
+                faces.forEach(element=>{
+                    if (element.sorrowLikelihood === 'LIKELY' || element.sorrowLikelihood === 'VERY_LIKELY'){
+                        sorrowPeopleCounter++;
+                    } else if(element.surpriseLikelihood === 'LIKELY' ||  element.surpriseLikelihood === 'VERY_LIKELY') {
+                        surprisePeopleCounter++;
+                    } else if(element.angerLikelihood === 'LIKELY' || element.angerLikelihood === 'VERY_LIKELY') {
+                        angryPeopleCounter++;
+                    } else if(element.joyLikelihood === 'LIKELY' || element.angerLikelihood === 'VERY_LIKELY') {
+                        joyPeopleCounter++;
+                    }
+                });
+                faceCounter.innerText = faces.length;
+                sorrowCounter.innerText = sorrowPeopleCounter;
+                surpriseCounter.innerText = surprisePeopleCounter;
+                angryCounter.innerText = angryPeopleCounter;
+                joyCounter.innerText = joyPeopleCounter;
+            }
+        }
+        const formData = new FormData();
+        formData.append("uploads", blob);
+        http.send(formData);
+    });
+}
