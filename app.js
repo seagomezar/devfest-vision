@@ -24,12 +24,13 @@ function upload() {
     snap().then((blob) => {
         http.open("POST", url, true);
         http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        http.onreadystatechange = function (data) {//Call a function when the state changes.
+        http.onreadystatechange = (data) => {
+            //Call a function when the state changes.
             if (http.readyState == 4 && http.status == 200) {
                 console.log(http.response);
             }
         }
-        var formData = new FormData();
+        const formData = new FormData();
         formData.append("uploads", blob);
         http.send(formData);
     });
