@@ -96,3 +96,17 @@ app.post("/faces-optimized", upload.single('uploads'), function (req, res) {
         });
 });
 
+app.post("/analizar-meetup", upload.single('uploads'), function (req, res) {
+    const currentFile = req.file.path;
+    console.log(currentFile);
+    vision.faceDetection({ source: { filename: 'uploads/IMG_3315.jpg' } })
+        .then((results) => {
+            const faces = results[0].faceAnnotations;
+            res.send(faces);
+        })
+        .catch((err) => {
+            console.error('ERROR:', err);
+            res.send("BAD");
+        });
+});
+
